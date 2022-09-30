@@ -1,0 +1,41 @@
+<div class="flex items-center rounded border border-transparent h-pc bg-lime-600 ">
+    <div class="rounded bg-white h-1" [style.width.%]="percentage"></div>
+</div>
+
+<!--style="width: 1%"-->
+<div class="w-136 container mx-auto flex flex-col my-10 rounded bg-lime-400 h-80">
+   <!--timer buttons-->
+    <div class="py-2 flex flex-row justify-around">
+    <button (click) ="onPomodoro()" 
+    [class.inactive-timer-button] ="pomodoro === false" 
+    [class.active-timer-button] ="pomodoro === true">
+        Pomodoro
+    </button>
+    <button (click) ="onShortBreak()" 
+    [class.inactive-timer-button] ="shortBreak === false"
+    [class.active-timer-button] ="shortBreak === true">
+    Short Break
+    </button>
+    <button (click) ="onLongBreak()"
+    [class.inactive-timer-button] ="longBreak === false" 
+    [class.active-timer-button] ="longBreak === true">
+    Long Break
+    </button>
+    </div>
+    <!--timer-->
+    <countdown *ngIf="pomodoro" #cd [config]='pomodoroConfig'  class="timer" (event)="handlePomoEvent($event)"></countdown>
+    <countdown *ngIf="shortBreak" #cd [config]='shortConfig' class="timer" (event)="handleShortEvent($event)"></countdown>
+    <countdown *ngIf="longBreak" #cd [config]='longConfig' class="timer" (event)="handleLongEvent($event)"></countdown>
+    <!--start/stop button-->
+    <div class="text-center">
+    <button (click) = "onSwitch()" [class.clicked] ="timerOn === true" [class.not-clicked] ="timerOn === false">
+       {{timerOn ? 'PAUSE': 'START'}}
+    </button>
+    </div>
+</div>
+<div class="text-white text-center mb-2">
+    {{message}}
+</div>
+<div class="text-white text-center opacity-75">
+    #{{counter+1}}
+</div>

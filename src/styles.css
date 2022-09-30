@@ -1,1 +1,68 @@
-/* You can add global styles to this file, and also import other style files */
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+@layer base {
+    input[id="estimated"]::-webkit-inner-spin-button,
+    input[id="estimated"]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    input[id="done"]::-webkit-inner-spin-button,
+    input[id="done"]::-webkit-outer-spin-button {
+      margin: 2px;
+      background-color: #fff;
+    }
+  }
+  
+.inactive-timer-button{
+    @apply text-white p-2 w-32;
+}
+
+.active-timer-button{
+    @apply text-white p-2 bg-lime-500 font-bold rounded w-32;
+}
+
+.clicked{
+    @apply w-52 bg-white text-lime-500 rounded text-2xl font-bold mt-11 py-2;
+}
+
+.not-clicked{
+    @apply w-52 bg-white text-lime-500 rounded text-2xl font-bold mt-10 py-2 border-b-4 border-b-gray-200;
+}
+
+.timer{
+    @apply text-white font-bold text-9xl text-center mt-5
+}
+
+.inactive-check-icon{
+        fill: #D1D5DB; 
+        @apply w-8 h-8;
+}
+
+.inactive-check-icon:hover{
+    fill: #050e26;
+}
+
+.active-check-icon{
+    fill: #A3E635;
+    @apply w-8 h-8;
+}
+
+.inactive-task-button{
+    @apply bg-white w-full rounded h-16 my-2 flex flex-row justify-between hover:border-l-8 border-gray-300 drop-shadow-lg;
+}
+
+.active-task-button{
+    @apply bg-white w-full rounded h-16 my-2 flex flex-row justify-between border-l-8 border-gray-600;
+}
+
+.task-done{
+    @apply line-through text-gray-500 font-semibold text-base py-1 pl-2 order-last;
+}
+
+.task-undone{
+    @apply text-gray-700 font-medium text-base py-1 pl-2 order-last;
+}
+

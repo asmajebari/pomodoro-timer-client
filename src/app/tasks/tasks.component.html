@@ -1,0 +1,85 @@
+
+<div class="text-white text-center my-2">
+  {{selectedTaskName}}
+</div>
+
+<div class="w-136 mx-auto flex flex-col py-4">
+  <div class="flex justify-between pb-3">
+    <p class="text-white text-xl font-bold">Tasks</p>
+    <button
+    id="dropdownDefault"
+      class="rounded bg-lime-400 px-0.5 hover:-translate-y-1 hover:scale-110"
+      data-dropdown-toggle="dropdown"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke-width="2.5"
+        stroke="white"
+        class="w-6 h-6"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M12 6.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 12.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 18.75a.75.75 0 110-1.5.75.75 0 010 1.5z"
+        />
+      </svg>
+    </button>
+    <button id="dropdownMenuIconButton" data-dropdown-toggle="dropdownDots" class="inline-flex items-center p-2 text-sm font-medium text-center text-gray-900 bg-white rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none dark:text-white focus:ring-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-600" type="button"> 
+      <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"></path></svg>
+    </button>
+    
+    <!-- Dropdown menu -->
+    <div id="dropdownDots" class="hidden z-10 w-44 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600">
+        <ul class="py-1 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownMenuIconButton">
+          <li>
+            <a href="#" class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Dashboard</a>
+          </li>
+          <li>
+            <a href="#" class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Settings</a>
+          </li>
+          <li>
+            <a href="#" class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Earnings</a>
+          </li>
+        </ul>
+        <div class="py-1">
+          <a href="#" class="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Separated link</a>
+        </div>
+    </div>
+  </div>
+
+  <hr/>
+
+  <div class="flex flex-col py-2">
+    <app-task-item
+      *ngFor="let task of tasks; let i = index"
+      [task]="task"
+      [index]="i"
+    ></app-task-item>
+  </div>
+
+    <button
+    *ngIf="editMode"
+    (click)="onAddTask()"
+      class="border-dashed border-2 rounded h-16 text-white bg-lime-400 text-xl font-bold opacity-75 hover:opacity-90"
+    >
+      <div class="flex flex-row justify-center">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          class="w-6 h-6"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 9a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V15a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V9z"
+            clip-rule="evenodd"
+          />
+        </svg>
+        <p class="pl-2">Add Task</p>
+      </div>
+    </button>
+    <app-task-edit *ngIf="!editMode" (cancel)="CancelEdit()" [editMode]="editMode"></app-task-edit>
+
+</div>
