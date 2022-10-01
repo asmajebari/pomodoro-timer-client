@@ -1,6 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Task } from '../task.model';
+import { tap } from 'rxjs';
+import { Task } from '../task.interface';
+import { TasksService } from '../tasks.service';
 
 @Component({
   selector: 'app-task-edit',
@@ -10,22 +12,25 @@ import { Task } from '../task.model';
 export class TaskEditComponent implements OnInit {
   @Output() cancel: EventEmitter<Boolean> = new EventEmitter();
   @Input() editMode = false;
-  @Input() task: Task = new Task("", false, 0, "");
+  @Input() task: Task = {} as Task;
   estimatedPomodoros: number = 0;
+  addNote = false;
   taskForm: FormGroup = {} as FormGroup;
-  constructor() { }
+  constructor(private tasksService: TasksService) { }
 
   ngOnInit(): void {
     this.initForm();
-    this.estimatedPomodoros = this.task.estimated;
+    if (this.task.estimated) {      
+      this.estimatedPomodoros = this.task.estimated;
+    } else {
+      this.estimatedPomodoros = 1;
+    }
   }
 
   private initForm() {
-  
     let taskName = "";
     let done = 0;
     let estimated = 0;
-
 
     if (this.editMode) {
       taskName = this.task.name;
@@ -46,7 +51,22 @@ export class TaskEditComponent implements OnInit {
   }
 
   onSubmit() {
-    this.task = this.taskForm.value;
+    if (this.editMode) {
+      this.tasksService.updateTask(this.task.id, { ...this.taskForm.value}).pipe(
+        tap(()=> this.tasksService.tasksChanged.next(true)))
+      .subscribe();
+    } else {
+      this.tasksService.addTask({...this.taskForm.value, completed:false}).pipe(
+        tap(()=> this.tasksService.tasksChanged.next(true)))
+      .subscribe();
+    }
+    this.cancel.emit(true);
+  }
+
+  onDelete() {
+    this.tasksService.deleteTask(this.task.id).pipe(
+      tap(()=> this.tasksService.tasksChanged.next(true)))
+    .subscribe();
     this.cancel.emit(true);
   }
 

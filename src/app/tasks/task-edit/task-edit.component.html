@@ -22,7 +22,7 @@
     </div>
 </div>
 <div class=" text-sm flex bg-gray-200 h-14 mt-auto rounded-b justify-between items-center">
-    <button *ngIf="editMode" type="button" class="text-gray-700 mx-6">
+    <button (click)="onDelete()" *ngIf="editMode" type="button" class="text-gray-700 mx-6">
         Delete
     </button>
     

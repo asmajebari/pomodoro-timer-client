@@ -1,5 +1,7 @@
 import { Component, EventEmitter, OnInit, ViewChild } from '@angular/core';
 import { CountdownComponent, CountdownConfig, CountdownEvent } from 'ngx-countdown';
+import { TasksService } from '../tasks/tasks.service';
+import { TimerService } from './timer.service';
 
 @Component({
   selector: 'app-timer',
@@ -13,9 +15,9 @@ export class TimerComponent implements OnInit {
   pomodoro = true;
   shortBreak = false;
   longBreak = false;
-  pomoTimer = 25;
-  shortTimer = 1;
-  longTimer = 25;
+  pomoTimer = 0.1;
+  shortTimer = 5;
+  longTimer = 15;
   message = "";
   counter = 0;
   percentage = '0';
@@ -25,9 +27,10 @@ export class TimerComponent implements OnInit {
   shortConfig: CountdownConfig = { demand: true, notify:0 };
   longConfig: CountdownConfig = { demand: true, notify:0 };
   
-  constructor() { }
+  constructor(private timerService: TimerService) { }
 
   ngOnInit(): void {
+  
     this.onPomodoro();
   }
 
@@ -79,8 +82,7 @@ export class TimerComponent implements OnInit {
 
   percentageCompleteCalc(initial: number, left: number) {
     initial = initial * 60000
-  
-    return Math.round(((initial-left)/initial)*100);
+    return ((initial-left)/initial*100);
   }
  
   handleShortEvent(e: CountdownEvent) {
@@ -98,13 +100,13 @@ export class TimerComponent implements OnInit {
   }
 
   handlePomoEvent(e: CountdownEvent) {
-    console.log(this.percentage);
     
     //this.percentageComplete = this.percentageComplete+0.5;
     //this.percentage = this.percentageComplete.toString();
     this.percentage = (this.percentageCompleteCalc(this.pomoTimer, e.left)).toString();
     if (e.left === 0) {
       this.counter++;
+      this.timerService.timerDone.next(true);
       if (this.counter % (this.longBreakInt)) {
         this.onShortBreak();
       } else {

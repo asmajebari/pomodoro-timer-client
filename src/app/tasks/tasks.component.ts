@@ -1,5 +1,6 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { Task } from './task.model';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Observable, Subscription } from 'rxjs';
+import { Task } from './task.interface';
 import { TasksService } from './tasks.service';
 
 @Component({
@@ -7,15 +8,24 @@ import { TasksService } from './tasks.service';
   templateUrl: './tasks.component.html',
   styleUrls: ['./tasks.component.css']
 })
-export class TasksComponent implements OnInit {
+export class TasksComponent implements OnInit, OnDestroy {
   taskIndex: number = 0;
   editMode = true;
+  subscription: Subscription = {} as Subscription;
   selectedTaskName: string = 'Choose a task to work on!';
-  tasks: Task[] = [new Task("Test1", false, 4), new Task("Test2", false, 2), new Task("Test3", true, 3)];
+  tasks: Task[] = [];
 
   constructor(private tasksService: TasksService) { }
 
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+  }
+
   ngOnInit(): void {
+    this.loadTasks();
+    this.subscription = this.tasksService.tasksChanged.subscribe(() => {
+      this.loadTasks();
+    })
     this.tasksService.taskSelected.subscribe((index) => {
       if (index >= 0) {
         this.selectedTaskName = this.tasks[index].name;
@@ -23,6 +33,12 @@ export class TasksComponent implements OnInit {
         this.selectedTaskName = 'Choose a task to work on!';
       }
     });
+  }
+
+  loadTasks() {
+    this.tasksService.getAllTasks().subscribe((tasks) => {
+      this.tasks = tasks;
+    })
   }
 
   selectedTask(index: number) {

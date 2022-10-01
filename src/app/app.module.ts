@@ -10,6 +10,7 @@ import { TaskItemComponent } from './tasks/task-item/task-item.component';
 import { TaskEditComponent } from './tasks/task-edit/task-edit.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CountdownConfig, CountdownGlobalConfig, CountdownModule } from 'ngx-countdown';
+import { HttpClientModule } from '@angular/common/http';
 
 function countdownConfigFactory(): CountdownConfig {
   return { format: `mm:ss` };
@@ -28,7 +29,8 @@ function countdownConfigFactory(): CountdownConfig {
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
-    CountdownModule
+    CountdownModule,
+    HttpClientModule
   ],
   providers: [{ provide: CountdownGlobalConfig, useFactory: countdownConfigFactory }],
   bootstrap: [AppComponent]
