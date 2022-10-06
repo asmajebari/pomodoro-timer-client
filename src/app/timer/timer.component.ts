@@ -1,5 +1,7 @@
-import { Component, EventEmitter, OnInit, ViewChild } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { CountdownComponent, CountdownConfig, CountdownEvent } from 'ngx-countdown';
+import { Subscription, tap } from 'rxjs';
+import { TimeDataService } from '../shared/services/time-data.service';
 import { TasksService } from '../tasks/tasks.service';
 import { TimerService } from './timer.service';
 
@@ -8,9 +10,10 @@ import { TimerService } from './timer.service';
   templateUrl: './timer.component.html',
   styleUrls: ['./timer.component.css']
 })
-export class TimerComponent implements OnInit {
+export class TimerComponent implements OnInit, OnDestroy {
   @ViewChild('cd', { static: false }) private countdown: CountdownComponent = {} as CountdownComponent;
-  
+  estimatedPomodoros = 0;
+  donePomodoros = 0;
   timerOn = false;
   pomodoro = true;
   shortBreak = false;
@@ -21,18 +24,26 @@ export class TimerComponent implements OnInit {
   message = "";
   counter = 0;
   percentage = '0';
-  percentageComplete = 0;
   longBreakInt = 4;
+  subscription: Subscription = {} as Subscription;
   pomodoroConfig: CountdownConfig = { demand: true, notify:0};
   shortConfig: CountdownConfig = { demand: true, notify:0 };
   longConfig: CountdownConfig = { demand: true, notify:0 };
   
-  constructor(private timerService: TimerService) { }
+  constructor(private timerService: TimerService, private timeDataService: TimeDataService) { }
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+  }
 
   ngOnInit(): void {
-  
     this.onPomodoro();
+    this.subscription = this.timeDataService.estimatedPomodoros.pipe(tap((pomodoros)=> {
+      this.estimatedPomodoros = pomodoros.estimated;
+      this.donePomodoros = pomodoros.done;
+      this.calculateEstimatedTime(0);
+    })).subscribe();
   }
+
 
   onSwitch() {
     this.timerOn = !this.timerOn;
@@ -51,10 +62,13 @@ export class TimerComponent implements OnInit {
     this.longBreak = false;
     this.pomodoroConfig.leftTime = timer;
     this.timerOn = false;
-    this.message ="Time to focus!"
+    this.message = "Time to focus!"
+    this.calculateEstimatedTime(0);
   }
 
   onShortBreak() {
+ 
+    
     this.percentage = '0';
     let timer = this.shortTimer * 60;
     this.pomodoro = false;
@@ -62,7 +76,8 @@ export class TimerComponent implements OnInit {
     this.longBreak = false;
     this.shortConfig.leftTime = timer;
     this.timerOn = false;
-    this.message ="Time for a short break!"
+    this.message = "Time for a short break!";
+    this.calculateEstimatedTime(this.shortTimer);
   }
 
   onLongBreak() {
@@ -73,7 +88,8 @@ export class TimerComponent implements OnInit {
     this.longBreak = true;
     this.longConfig.leftTime = timer;
     this.timerOn = false;
-    this.message ="Time for a long break!"
+    this.message = "Time for a long break!";
+    this.calculateEstimatedTime(this.longTimer);
   }
 
   notificationCalc(time: number) {
@@ -81,7 +97,7 @@ export class TimerComponent implements OnInit {
   }
 
   percentageCompleteCalc(initial: number, left: number) {
-    initial = initial * 60000
+    initial = initial * 60000;
     return ((initial-left)/initial*100);
   }
  
@@ -93,16 +109,13 @@ export class TimerComponent implements OnInit {
   }
 
   handleLongEvent(e: CountdownEvent) {
-    this.percentage = (this.percentageCompleteCalc(this.shortTimer, e.left)).toString();
+    this.percentage = (this.percentageCompleteCalc(this.longTimer, e.left)).toString();
     if (e.left === 0) {
       this.onPomodoro();
     }
   }
 
   handlePomoEvent(e: CountdownEvent) {
-    
-    //this.percentageComplete = this.percentageComplete+0.5;
-    //this.percentage = this.percentageComplete.toString();
     this.percentage = (this.percentageCompleteCalc(this.pomoTimer, e.left)).toString();
     if (e.left === 0) {
       this.counter++;
@@ -114,5 +127,23 @@ export class TimerComponent implements OnInit {
       }
     }
    
+  } 
+
+  calculateEstimatedTime(startingPoint: number) { 
+    let timeEstimated = 0;
+    if (this.estimatedPomodoros != 0) {
+      let breaks = this.estimatedPomodoros - this.donePomodoros - 1;
+      let longBreaks = Math.floor(breaks / this.longBreakInt);
+      let shortBreaks = breaks - longBreaks;
+    
+
+        timeEstimated = this.pomoTimer * (breaks + 1)
+        + longBreaks * this.longTimer
+        + shortBreaks * this.shortTimer
+        + startingPoint;
+    }
+    console.log(timeEstimated);
+    
+    this.timeDataService.estimatedTime.next(timeEstimated);
   }
 }

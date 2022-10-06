@@ -17,7 +17,7 @@ export class TasksService {
   @Output() tasksChanged: Subject<boolean> = new Subject();
  
   //save selected task id to not lose it after refreshing tasks
-  
+
   getSelectedTask() {
     return this.selectedtask;
   }
@@ -30,7 +30,6 @@ export class TasksService {
   getAllTasks() {
     return this.http.get<Task[]>(this.getUrl());
   }
-
   
   addTask(task:Task) {
     return this.http.post<Task>(this.getUrl(), task);
@@ -42,6 +41,10 @@ export class TasksService {
 
   deleteTask(id: number) {
     return this.http.delete(this.getUrlWithID(id));
+  }
+
+  deleteCompletedTasks() {
+   
   }
 
   

@@ -19,8 +19,11 @@
     "@angular/platform-browser": "^14.1.0",
     "@angular/platform-browser-dynamic": "^14.1.0",
     "@angular/router": "^14.1.0",
+    "@popperjs/core": "^2.11.6",
+    "@sweetalert2/ngx-sweetalert2": "^12.0.1",
     "ngx-countdown": "^14.0.0",
     "rxjs": "~7.5.0",
+    "sweetalert2": "^11.4.37",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"
   },

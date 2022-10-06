@@ -14,8 +14,8 @@ export class TaskEditComponent implements OnInit {
   @Input() editMode = false;
   @Input() task: Task = {} as Task;
   estimatedPomodoros: number = 0;
-  addNote = false;
   taskForm: FormGroup = {} as FormGroup;
+  
   constructor(private tasksService: TasksService) { }
 
   ngOnInit(): void {

@@ -17,7 +17,7 @@
     Short Break
     </button>
     <button (click) ="onLongBreak()"
-    [class.inactive-timer-button] ="longBreak === false" 
+    [class.inactive-timer-button] ="longBreak === false" c
     [class.active-timer-button] ="longBreak === true">
     Long Break
     </button>
@@ -37,5 +37,5 @@
     {{message}}
 </div>
 <div class="text-white text-center opacity-75">
-    #{{counter+1}}
+    #{{counter}}
 </div>
