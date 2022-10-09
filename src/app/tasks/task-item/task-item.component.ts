@@ -52,8 +52,6 @@ export class TaskItemComponent implements OnInit, OnDestroy {
       this.tasksService.onSelectedTask(-1);
    }
   }
-
-
   //when the complete button is clicked
   onTicked(event: any) {
     this.isCompleted = !this.isCompleted;
@@ -63,7 +61,14 @@ export class TaskItemComponent implements OnInit, OnDestroy {
   }
 
   updateTask() {
-    this.tasksService.updateTask(this.task.id, {...this.task, completed: this.isCompleted}).pipe(
+    console.log(this.task);
+    let update = {
+      name: this.task.name,
+      completed: this.isCompleted,
+      done: this.task.done,
+      estimated: this.task.estimated
+    };
+    this.tasksService.updateTask(this.task._id!, { ...update}  ).pipe(
       tap(()=> this.tasksService.tasksChanged.next(true)))
     .subscribe();
   }

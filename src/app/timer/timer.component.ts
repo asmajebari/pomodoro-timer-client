@@ -142,7 +142,7 @@ export class TimerComponent implements OnInit, OnDestroy {
         + shortBreaks * this.shortTimer
         + startingPoint;
     }
-    console.log(timeEstimated);
+    //console.log(timeEstimated);
     
     this.timeDataService.estimatedTime.next(timeEstimated);
   }

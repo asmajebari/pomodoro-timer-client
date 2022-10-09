@@ -35,11 +35,11 @@ export class TasksService {
     return this.http.post<Task>(this.getUrl(), task);
   }
 
-  updateTask(id: number, task: Task) {
+  updateTask(id: string, task: Task) {
     return this.http.patch<Task>(this.getUrlWithID(id), task);
   }
 
-  deleteTask(id: number) {
+  deleteTask(id: string) {
     return this.http.delete(this.getUrlWithID(id));
   }
 
@@ -52,7 +52,7 @@ export class TasksService {
     return `${BASE_URL}/${this.model}`;
   }
 
-  private getUrlWithID(id: number) {
+  private getUrlWithID(id: string) {
     return `${this.getUrl()}/${id}`;
   }
 

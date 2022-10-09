@@ -18,7 +18,7 @@ export class TaskEditComponent implements OnInit {
   
   constructor(private tasksService: TasksService) { }
 
-  ngOnInit(): void {
+  ngOnInit(): void { 
     this.initForm();
     if (this.task.estimated) {      
       this.estimatedPomodoros = this.task.estimated;
@@ -52,7 +52,9 @@ export class TaskEditComponent implements OnInit {
 
   onSubmit() {
     if (this.editMode) {
-      this.tasksService.updateTask(this.task.id, { ...this.taskForm.value}).pipe(
+      console.log(this.taskForm.value);
+      
+      this.tasksService.updateTask(this.task._id!, { ...this.taskForm.value}).pipe(
         tap(()=> this.tasksService.tasksChanged.next(true)))
       .subscribe();
     } else {
@@ -64,7 +66,7 @@ export class TaskEditComponent implements OnInit {
   }
 
   onDelete() {
-    this.tasksService.deleteTask(this.task.id).pipe(
+    this.tasksService.deleteTask(this.task._id!).pipe(
       tap(()=> this.tasksService.tasksChanged.next(true)))
     .subscribe();
     this.cancel.emit(true);

@@ -1,5 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { createPopper } from '@popperjs/core';
+import { AuthService } from '../auth/auth.service';
 
 @Component({
   selector: 'app-header',
@@ -12,10 +13,13 @@ export class HeaderComponent implements OnInit {
     {} as ElementRef;
   @ViewChild('popoverDropdownRef', { static: false })
   popoverDropdownRef: ElementRef = {} as ElementRef;
-  constructor() {}
+  constructor(private authService:AuthService) {}
 
   ngOnInit(): void { }
   
+  onLogout() {
+    this.authService.logout();
+  }
   ngAfterViewInit() {
     createPopper(
       this.btnDropdownRef.nativeElement,

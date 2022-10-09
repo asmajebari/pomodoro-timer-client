@@ -4,10 +4,10 @@
     </p>
     
     <div class="flex flex-col bg-white rounded shadow-inner h-112 mt-12">
-    <button (click)="onGoogleAuth()" class="mx-auto text-gray-700 shadow-md flex flex-row space-x-2 justify-center rounded border-2 w-80 px-4 py-2 mt-8 mb-4 opacity-80 hover:opacity-95 active:shadow-none">
+    <a href="http://localhost:3000/auth/google" class="mx-auto text-gray-700 shadow-md flex flex-row space-x-2 justify-center rounded border-2 w-80 px-4 py-2 mt-8 mb-3 opacity-80 hover:opacity-95 active:shadow-none">
         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 32 32" class="h-6 w-6"><defs><path id="A" d="M44.5 20H24v8.5h11.8C34.7 33.9 30.1 37 24 37c-7.2 0-13-5.8-13-13s5.8-13 13-13c3.1 0 5.9 1.1 8.1 2.9l6.4-6.4C34.6 4.1 29.6 2 24 2 11.8 2 2 11.8 2 24s9.8 22 22 22c11 0 21-8 21-22 0-1.3-.2-2.7-.5-4z"/></defs><clipPath id="B"><use xlink:href="#A"/></clipPath><g transform="matrix(.727273 0 0 .727273 -.954545 -1.45455)"><path d="M0 37V11l17 13z" clip-path="url(#B)" fill="#fbbc05"/><path d="M0 11l17 13 7-6.1L48 14V0H0z" clip-path="url(#B)" fill="#ea4335"/><path d="M0 37l30-23 7.9 1L48 0v48H0z" clip-path="url(#B)" fill="#34a853"/><path d="M48 48L17 24l-4-3 35-10z" clip-path="url(#B)" fill="#4285f4"/></g></svg>
         <p>{{isLoginMode? 'Login ': 'Signup '}}with Google</p>  
-    </button>
+    </a>
     
     <div class="flex flex-row mt-4 content-center justify-center">
         <div class="bg-gray-200 rounded w-32 h-px mt-3 ">
@@ -17,13 +17,19 @@
         </div>
     </div>
     
-    <div class="text-gray-500 mt-6 mx-auto ">
-    <form class="flex flex-col" action="">
+    <div class="text-gray-500 mt-4 mx-auto ">
+    <form #authForm="ngForm" (ngSubmit)="onSubmit(authForm)" class="flex flex-col">
     <label for="email" class="w-14">Email</label>
-    <input class="bg-gray-200 w-80 h-8 rounded mb-5 px-2" type="email">
-    
+    <input class="bg-gray-200 w-80 h-8 rounded mb-5 px-2" type="email"
+    id="email" name="email" required email ngModel>
+
+    <label *ngIf="!isLoginMode" for="username" class="w-14">Username</label>
+    <input *ngIf="!isLoginMode" class="bg-gray-200 w-80 h-8 rounded mb-5 px-2" type="text"
+    id="username" name="username" required ngModel>
+
     <label for="password" class="w-14">Password</label>
-    <input class="bg-gray-200 w-80 h-8 rounded px-2" type="password">
+    <input class="bg-gray-200 w-80 h-8 rounded px-2" type="password" 
+    id="password" name="password" required minlength="8" ngModel>
     
     <button type="submit" class="mx-auto w-80 text-white py-2 mt-10 bg-gray-700 rounded ">
        {{isLoginMode? 'Login': 'Register'}} 
@@ -31,7 +37,7 @@
     <!--
     <button *ngIf="isLoginMode" type="button" class="text-sm underline mt-6">
         Forgot password
-    </button>
+    </button
     -->
         </form>
     </div> 

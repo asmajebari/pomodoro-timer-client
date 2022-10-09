@@ -77,13 +77,12 @@ export class TasksComponent implements OnInit, OnDestroy {
   }
 
   onDeleteAllTasks() {
-    console.log('heree');
 
-    const tasksIdsArray = this.tasks.map((task) => task.id);
+    const tasksIdsArray = this.tasks.map((task) => task._id);
 
     tasksIdsArray.forEach((id) =>
       this.tasksService
-        .deleteTask(id)
+        .deleteTask(id!)
         .pipe(tap(() => this.tasksService.tasksChanged.next(true)))
         .subscribe()
     );
