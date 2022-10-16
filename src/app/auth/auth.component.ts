@@ -11,16 +11,21 @@ import { AuthResponseData, AuthService } from './auth.service';
   styleUrls: ['./auth.component.css']
 })
 export class AuthComponent implements OnInit {
+  googleAuthURL = "http://localhost:3000/auth/google"
   isLoginMode = true;
+  link = '';
+  error: string = '';
   constructor(private authService:AuthService, private router:Router, private route:ActivatedRoute) { }
 
   ngOnInit(): void {
     if (this.router.url.replace('/auth/', '') === 'login'){
       this.isLoginMode = true;
+      this.link = "register";
     } else
     if(this.router.url.replace('/auth/', '') === 'register')
     {
       this.isLoginMode = false;
+      this.link = "login";
     } else {
       if (this.router.url.replace('/auth/', '') === 'google') {
         this.googleLogin();
@@ -52,6 +57,9 @@ export class AuthComponent implements OnInit {
 
     observable.subscribe(res => {
       this.router.navigate(['/']);
-    });
+    }, errorMessage => {
+      this.error = errorMessage;
+    }
+    );
   }
 }

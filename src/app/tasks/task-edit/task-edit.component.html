@@ -1,6 +1,6 @@
-<form [formGroup]="taskForm" (ngSubmit)="onSubmit()" class="flex flex-col bg-white w-full rounded h-60 mb-4 flex flex-row drop-shadow-lg">
+<form #authForm="ngForm" [formGroup]="taskForm" (ngSubmit)="onSubmit()" class="flex flex-col bg-white w-full rounded h-60 mb-4 flex flex-row drop-shadow-lg">
     
-    <input id="name" formControlName="name" class="placeholder:italic placeholder:text-gray-300 focus:outline-none text-xl font-medium w-full mt-4 py-2 pl-6 pr-3" placeholder="What are you working on?" type="text" name="search"/>
+    <input required id="name" formControlName="name" class="placeholder:italic placeholder:text-gray-300 focus:outline-none text-xl font-medium w-full mt-4 py-2 pl-6 pr-3" placeholder="What are you working on?" type="text" name="search"/>
  
     <div class="flex flex-col pl-6 mt-4 text-gray-700">
     <label for="estimate" class="mb-4">{{editMode? 'Done/Estimated pomodoros': 'Estimated pomodoros:'}}</label>
@@ -31,7 +31,7 @@
     Cancel
 </button>
 
-<button type="submit" class="bg-gray-700 text-white py-2 px-3 mx-4 rounded">
+<button [disabled]="!authForm.valid" type="submit" class="bg-gray-700 text-white py-2 px-3 mx-4 rounded">
     Save
 </button>
 </div>

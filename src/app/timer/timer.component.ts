@@ -18,7 +18,7 @@ export class TimerComponent implements OnInit, OnDestroy {
   pomodoro = true;
   shortBreak = false;
   longBreak = false;
-  pomoTimer = 0.1;
+  pomoTimer = 25;
   shortTimer = 5;
   longTimer = 15;
   message = "";

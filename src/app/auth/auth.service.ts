@@ -27,7 +27,8 @@ export class AuthService {
     let username = data.user.username;
     let id = data.user._id;
     let token = data.token;
-    this.handleAuthentication(email, id, username, token);
+    let avatar = data.user.avatar;
+    this.handleAuthentication(email, id, username, token, avatar);
   }
 
   register(email:string, username:string, password: string) {
@@ -58,14 +59,16 @@ export class AuthService {
   }
 
   logout() {
+    this.http.post(`${this.getUrl()}/users/logout`, {}).subscribe();
     this.user.next({} as User);
-    this.router.navigate(['/']);
+    window.location.reload();
     localStorage.removeItem('Data');
     if (this.tokenExpirationTimer) {
       clearTimeout(this.tokenExpirationTimer);
     }
-
     this.tokenExpirationTimer = null;
+    
+    
   }
 
   autoLogin() {
@@ -92,13 +95,12 @@ export class AuthService {
 
   autoLogout(expirationDuration: number) {
     this.tokenExpirationTimer = setTimeout(() => {
-      console.log(expirationDuration);
       
        this.logout();
      }, expirationDuration);
      
    }
-  private handleAuthentication(email: string, id: string, username: string, token: string) {
+  private handleAuthentication(email: string, id: string, username: string, token: string, avatar?:string) {
     const decoded_token = jwtDecode<JwtPayload>(token);
  
     const expirationTime = decoded_token.exp;
@@ -108,7 +110,8 @@ export class AuthService {
         id,
         username,
         token,
-        expirationDate);
+        expirationDate,
+        avatar);
     this.user.next(user);
     localStorage.setItem('Data', JSON.stringify(user));
     
@@ -117,23 +120,41 @@ export class AuthService {
   }
 
   private handleError(errorRes: HttpErrorResponse) {
+    
     let errorMessage = "An unknown error occured!";
-      if (!errorRes.error || !errorRes.error.error) {
-        return throwError(errorMessage);
-      }
-      switch (errorRes.error.error.message) {
-        case 'Email is invalid':
-          errorMessage = 'This email already exists!';
+    
+      switch (errorRes.error.message) {
+        case 'Unable to login':
+          errorMessage = 'Unable to log in!';
           break;
-        case 'EMAIL_NOT_FOUND':
-          errorMessage = 'The email does not exist.';
-          break;
-        case 'INVALID_PASSWORD':
-          errorMessage = "Password not correct!";
+        case 'This email already exists':
+          errorMessage = 'This email already exists';
           break;
       }
       return throwError
       (errorMessage);
+  }
+
+  updateUser(username: string) {
+    const userData: {
+      email: string;
+      username: string;
+      _id: string;
+      _token: string;
+      _tokenExpirationDate: Date;
+    } = JSON.parse(localStorage.getItem('Data')!);
+    if (userData) {
+      userData.username = username;
+    localStorage.setItem('Data', JSON.stringify(userData));
+    }
+    
+    return this.http.patch(`${this.getUrl()}/users/me`, { username });
+  
+  }
+
+  deleteUser() {
+    this.http.delete(`${this.getUrl()}/users/me`).subscribe();
+    this.logout();
   }
 
   private getUrl(){

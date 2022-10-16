@@ -44,7 +44,7 @@ export class TasksService {
   }
 
   deleteCompletedTasks() {
-   
+    return this.http.delete(this.getUrl());
   }
 
   

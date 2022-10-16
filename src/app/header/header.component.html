@@ -2,14 +2,14 @@
 <div class="order-first text-white py-2 text-xl font-bold" >
 PomoTimer
 </div>
-<div class="order-last w-10" >
+<div *ngIf="user; else elseBlock" class="order-last w-10" >
     <button  (click)="toggleDropdown($event)" #btnDropdownRef class="hover:-translate-y-1 hover:scale-110">
-    <img src="https://www.w3schools.com/howto/img_avatar.png" alt="avatar" class=" rounded border-lime-400 border-2"> 
+    <img src={{avatar}} alt="avatar" class=" rounded border-lime-400 border-2"> 
 </button>
 <div #popoverDropdownRef class="z-50 left-14" style="min-width: 12rem">
     <ul class="bg-white text-gray-700 px-2 text-base z-50 py-2 list-none rounded shadow-lg mt-1"
     style="min-width: 12rem" [ngClass]="dropdownPopoverShow ? 'block' : 'hidden'">
-      <li><a style="cursor:pointer;" class="flex flex-row content-center" >
+      <li><a (click)="toggleModal()" style="cursor:pointer;" class="flex flex-row content-center" >
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4 mt-0.5 mx-1">
             <path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z" clip-rule="evenodd" />
           </svg>
@@ -21,12 +21,50 @@ PomoTimer
           </svg>
           
         Logout</a></li>
-      <li><a style="cursor:pointer" class="flex flex-row content-center">
+      <li><a (click)="onDeleteAccount()" style="cursor:pointer" class="flex flex-row content-center">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 mt-0.5 mx-1">
           <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
         </svg>        
         Delete account</a></li>
   </ul>
   </div>
+
+<div *ngIf="showModal" class="overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none justify-center items-center flex">
+  <div class="relative my-6 mx-auto w-136">
+    <!--content-->
+    <div class="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+      <!--header-->
+      <div class="flex items-start justify-between p-5 border-b border-solid border-slate-200 rounded-t">
+        <h3 class="text-2xl text-gray-700 font-semibold">
+        Profile
+        </h3>
+      </div>
+      <!--body-->
+      <div class="relative p-6 flex-auto">
+        <form #authForm="ngForm" class="flex flex-row">
+          <img src={{avatar}} alt="avatar" class="rounded-full w-24 h-24">
+          <input required class="ml-10 text-2xl text-gray-700 focus:outline-none" type="text" id="username" name="username" [(ngModel)]="username" >
+        </form>
+      </div>
+      <!--footer-->
+      <div class="flex items-center justify-end p-6 border-t border-solid border-slate-200 rounded-b">
+        <button class="text-gray-700 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button" (click)="toggleModal()">
+          Close
+        </button>
+        <button [disabled]="!authForm.valid" type="submit" class="bg-gray-700 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button" (click)="onSaveChanges()">
+          Save Changes
+        </button>
+      </div>
+    </div>
+  </div>
 </div>
+<div *ngIf="showModal" class="opacity-25 fixed inset-0 z-40 bg-black"></div>
+</div>
+<ng-template #elseBlock>
+  <div class="order-last">
+    <a routerLink="/auth/login">
+    <button class="bg-gray-700  text-white active:bg-lime-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mb-1 ease-linear transition-all duration-150">Login</button>
+  </a>
+  </div>
+</ng-template>
    </div>

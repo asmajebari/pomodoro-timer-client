@@ -1,12 +1,13 @@
 import { Component, NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthComponent } from './auth/auth.component';
+import { AuthGuard } from './auth/auth.guard';
 
 import { ResetpasswordComponent } from './auth/resetpassword/resetpassword.component';
 import { MainComponent } from './main/main.component';
 
 const routes: Routes = [
-  { path: '', component: MainComponent },
+  { path: '', component: MainComponent, canActivate :[AuthGuard] },
   {path: 'auth' , redirectTo: "auth/login"},
   {
     path: 'auth', children: [

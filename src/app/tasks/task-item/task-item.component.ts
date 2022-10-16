@@ -61,7 +61,6 @@ export class TaskItemComponent implements OnInit, OnDestroy {
   }
 
   updateTask() {
-    console.log(this.task);
     let update = {
       name: this.task.name,
       completed: this.isCompleted,

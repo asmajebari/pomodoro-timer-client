@@ -97,7 +97,10 @@ export class TasksComponent implements OnInit, OnDestroy {
   }
 
   onClearFinished() {
-    
+    this.tasksService.deleteCompletedTasks()
+      .subscribe();
+    this.tasksService.tasksChanged.next(true);
+      this.dropdownPopoverShow = false;
   }
 
   CancelEdit() {

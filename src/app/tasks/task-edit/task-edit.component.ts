@@ -52,7 +52,6 @@ export class TaskEditComponent implements OnInit {
 
   onSubmit() {
     if (this.editMode) {
-      console.log(this.taskForm.value);
       
       this.tasksService.updateTask(this.task._id!, { ...this.taskForm.value}).pipe(
         tap(()=> this.tasksService.tasksChanged.next(true)))
