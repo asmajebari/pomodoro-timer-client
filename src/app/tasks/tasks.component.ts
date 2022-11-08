@@ -17,6 +17,7 @@ import { TasksService } from './tasks.service';
   styleUrls: ['./tasks.component.css'],
 })
 export class TasksComponent implements OnInit, OnDestroy {
+
   totalEstimated = 0;
   totalDone = 0;
   estimatedTime = 0;

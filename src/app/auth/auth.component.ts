@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { ActivatedRoute, Params, Router, UrlSegment } from '@angular/router';
+import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { AuthResponseData, AuthService } from './auth.service';
 
@@ -15,7 +15,7 @@ export class AuthComponent implements OnInit {
   isLoginMode = true;
   link = '';
   error: string = '';
-  constructor(private authService:AuthService, private router:Router, private route:ActivatedRoute) { }
+  constructor(private authService:AuthService, private router:Router) { }
 
   ngOnInit(): void {
     if (this.router.url.replace('/auth/', '') === 'login'){

@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { AuthService } from '../auth/auth.service';
 
 import { HeaderComponent } from './header.component';
 
 describe('HeaderComponent', () => {
   let component: HeaderComponent;
-  let fixture: ComponentFixture<HeaderComponent>;
 
   beforeEach(async () => {
+    const authServiceSpy = jasmine.createSpyObj<AuthService>(['updateUser', 'logout', 'deleteUser'])
     await TestBed.configureTestingModule({
-      declarations: [ HeaderComponent ]
+      providers: [HeaderComponent,
+      {provide: AuthService, useValue: authServiceSpy}]
     })
     .compileComponents();
-
-    fixture = TestBed.createComponent(HeaderComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+    component = TestBed.inject(HeaderComponent);
+    component.ngOnInit();
   });
 
   it('should create', () => {

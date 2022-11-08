@@ -1,20 +1,21 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TasksService } from '../tasks.service';
 
 import { TaskEditComponent } from './task-edit.component';
 
 describe('TaskEditComponent', () => {
   let component: TaskEditComponent;
-  let fixture: ComponentFixture<TaskEditComponent>;
-
+  
   beforeEach(async () => {
+    const tasksServiceSpy = jasmine.createSpyObj<TasksService>(['updateTask', 'addTask', 'deleteTask'])
     await TestBed.configureTestingModule({
-      declarations: [ TaskEditComponent ]
+      providers: [TaskEditComponent,
+      {provide: TasksService, useValue: tasksServiceSpy}]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(TaskEditComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+    component = TestBed.inject(TaskEditComponent);
+    component.ngOnInit();
   });
 
   it('should create', () => {

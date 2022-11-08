@@ -37,6 +37,7 @@ export class HeaderComponent implements OnInit {
     this.toggleModal();
     this.authService.updateUser(this.username).subscribe();
   }
+  
   toggleModal() {
     this.showModal = !this.showModal;
     this.dropdownPopoverShow = false;
@@ -59,6 +60,7 @@ export class HeaderComponent implements OnInit {
       }
     );
   }
+
   toggleDropdown(event: any) {
     event.preventDefault();
     if (this.dropdownPopoverShow) {

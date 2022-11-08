@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AuthComponent } from './auth.component';
+import { AuthService } from './auth.service';
 
 describe('AuthComponent', () => {
   let component: AuthComponent;
-  let fixture: ComponentFixture<AuthComponent>;
 
   beforeEach(async () => {
+    const authServiceSpy = jasmine.createSpyObj<AuthService>(['googleAuth', 'register', 'login'])
     await TestBed.configureTestingModule({
-      declarations: [ AuthComponent ]
+      providers: [AuthComponent,
+      {provide: AuthService, useValue: authServiceSpy }]
     })
     .compileComponents();
-
-    fixture = TestBed.createComponent(AuthComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+    component = TestBed.inject(AuthComponent);
+    component.ngOnInit();
   });
 
   it('should create', () => {
