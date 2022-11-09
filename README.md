@@ -1,4 +1,4 @@
-# pomodoroTimer_client
+# pomodoro-timer-client
 
 This is the backend of a tasks manager with a pomodoro timer to track progess.
 
